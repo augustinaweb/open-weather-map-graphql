@@ -45,7 +45,7 @@ const typeDefs = gql`
   }
 
   type Temperature {
-    day: Flot
+    day: Float
     night: Float
   }
 
