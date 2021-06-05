@@ -10,7 +10,7 @@ const resolvers = {
       // name is required | country and config are optional
       const { name, country, config } = args;
       let url1 = `${WEATHER_API}&q=${name}`;
-      let units, lang, excludeQuery;
+      let units, lang;
 
       // Add other fields if possible
       if (country) url1 = url + `,${country}`;
@@ -28,36 +28,36 @@ const resolvers = {
           });
         }
 
-        const lat = `&lat=${data.coord.lat}`;
-        const lon = `&lon=${data.coord.lon}`;
-        const url2 = `${ONECALL_API}${lat}${lon}`;
+        const lat = await `&lat=${data.coord.lat}`;
+        const lon = await `&lon=${data.coord.lon}`;
+        const url2 = await `${ONECALL_API}${lat}${lon}`;
         if (units) {
-          url2 = `${url2}${units}`;
+          url2 = await `${url2}${units}`;
         }
         if (lang) {
-          url2 = `${url2}${lang}`;
+          url2 = await `${url2}${lang}`;
         }
 
         const { results } = await axios.get(url2);
 
         const daily = results.daily.map((day) => {
           return {
-            dt: results.day.dt,
-            sunrise: results.day.sunrise,
-            sunset: results.day.sunset,
+            dt: day.dt,
+            sunrise: day.sunrise,
+            sunset: day.sunset,
             temp: {
-              day: results.day.temp.day,
-              night: results.day.temp.night,
+              day: day.temp.day,
+              night: day.temp.night,
             },
-            humidity: results.day.humidity,
-            wind_speed: results.day.wind_speed,
-            wind_deg: results.day.wind_deg,
+            humidity: day.humidity,
+            wind_speed: day.wind_speed,
+            wind_deg: day.wind_deg,
             weather: [
               {
-                id: results.day.weather.id,
-                main: results.day.weather.description,
-                description: results.day.weather.description,
-                icon: results.day.weather.icon,
+                id: day.weather.id,
+                main: day.weather.description,
+                description: day.weather.description,
+                icon: day.weather.icon,
               },
             ],
           };
