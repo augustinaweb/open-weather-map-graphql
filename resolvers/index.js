@@ -2,24 +2,22 @@ const axios = require("axios");
 const { UserInputError } = require("apollo-server");
 
 const WEATHER_API = `https://api.openweathermap.org/data/2.5/weather?appid=${process.env.KEY}`;
-const GROUP_API = `https://api.openweathermap.org/data/2.5/group?appid=${process.env.KEY}`;
+const ONECALL_API = `https://api.openweathermap.org/data/2.5/onecall?appid=${process.env.KEY}&exclude=daily,minutely,alerts`;
 
 const resolvers = {
-
   Query: {
-
     getCityByName: async (obj, args, context, info) => {
       // name is required | country and config are optional
       const { name, country, config } = args;
-      let url = `${WEATHER_API}&q=${name}`;
+      let url1 = `${WEATHER_API}&q=${name}`;
+      let units, lang, excludeQuery;
 
       // Add other fields if possible
-      if (country) url = url + `,${country}`;
-      if (config && config.units) url = url + `&units=${config.units}`;
-      if (config && config.lang) url = url + `&lang=${config.lang}`;
-
+      if (country) url1 = url + `,${country}`;
+      if (config && config.units) units = `&units=${config.units}`;
+      if (config && config.lang) lang = `&lang=${config.lang}`;
       try {
-        const { data } = await axios.get(url);
+        const { data } = await axios.get(url1);
 
         // By default, any invalid country code is ignored by the API
         // In this case, the API returns data for any city that matches the name
@@ -30,90 +28,75 @@ const resolvers = {
           });
         }
 
+        const lat = `&lat=${data.coord.lat}`;
+        const lon = `&lon=${data.coord.lon}`;
+        const url2 = `${ONECALL_API}${lat}${lon}`;
+        if (units) {
+          url2 = `${url2}${units}`;
+        }
+        if (lang) {
+          url2 = `${url2}${lang}`;
+        }
+
+        const { results } = await axios.get(url2);
+
+        const daily = results.daily.map((day) => {
+          return {
+            dt: results.day.dt,
+            sunrise: results.day.sunrise,
+            sunset: results.day.sunset,
+            temp: {
+              day: results.day.temp.day,
+              night: results.day.temp.night,
+            },
+            humidity: results.day.humidity,
+            wind_speed: results.day.wind_speed,
+            wind_deg: results.day.wind_deg,
+            weather: [
+              {
+                id: results.day.weather.id,
+                main: results.day.weather.description,
+                description: results.day.weather.description,
+                icon: results.day.weather.icon,
+              },
+            ],
+          };
+        });
+
         return {
-          id: data.id,
-          name: data.name,
-          country: data.sys.country,
-          coord: data.coord,
-          weather: {
-            summary: {
-              title: data.weather[0].main,
-              description: data.weather[0].description,
-              icon: data.weather[0].icon,
-            },
-            temperature: {
-              actual: data.main.temp,
-              feelsLike: data.main.feels_like,
-              min: data.main.temp_min,
-              max: data.main.temp_max,
-            },
-            wind: {
-              speed: data.wind.speed,
-              deg: data.wind.deg,
-            },
-            clouds: {
-              all: data.clouds.all,
-              visibility: data.visibility,
-              humidity: data.main.humidity,
-            },
-            timestamp: data.dt,
+          lat: results.lat,
+          lon: results.lon,
+          timezone: results.timezone,
+          current: {
+            dt: results.current.dt,
+            sunrise: results.current.sunrise,
+            sunset: results.current.sunset,
+            temp: results.current.temp,
+            feels_like: results.current.feels_like,
+            pressure: results.current.pressure,
+            humidity: results.current.humidity,
+            dew_point: results.current.dew_point,
+            uvi: results.current.uvi,
+            clouds: results.current.clouds,
+            visibility: results.current.visibility,
+            wind_speed: results.current.wind_speed,
+            wind_deg: results.current.wind_deg,
+            weather: [
+              {
+                id: results.weather.id,
+                main: results.weather.main,
+                description: results.weather.description,
+                icon: results.weather.icon,
+              },
+            ],
           },
+          daily: daily,
         };
       } catch (e) {
         return null;
       }
     },
-
-    getCityById: async (obj, args, context, info) => {
-      // id is required (can be string or array) | config is optional
-      const { id, config } = args;
-      let url = `${GROUP_API}&id=${id.join(",")}`;
-
-      // Add other fields if possible
-      if (config && config.units) url = url + `&units=${config.units}`;
-      if (config && config.lang) url = url + `&lang=${config.lang}`;
-
-      try {
-        const { data } = await axios.get(url);
-        const cityList = data.list.map((city) => {
-          return {
-            id: city.id,
-            name: city.name,
-            country: city.sys.country,
-            coord: city.coord,
-            weather: {
-              summary: {
-                title: city.weather[0].main,
-                description: city.weather[0].description,
-                icon: city.weather[0].icon,
-              },
-              temperature: {
-                actual: city.main.temp,
-                feelsLike: city.main.feels_like,
-                min: city.main.temp_min,
-                max: city.main.temp_max,
-              },
-              wind: {
-                speed: city.wind.speed,
-                deg: city.wind.deg,
-              },
-              clouds: {
-                all: city.clouds.all,
-                visibility: city.visibility,
-                humidity: city.main.humidity,
-              },
-              timestamp: city.dt,
-            },
-          };
-        });
-        return cityList;
-      } catch (e) {
-        return null;
-      }
-    },
-    
   },
-
 };
 
 module.exports = {

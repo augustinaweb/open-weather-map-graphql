@@ -2,48 +2,51 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   type City {
-    id: ID
-    name: String
-    country: String
-    coord: Coordinates
-    weather: Weather
-  }
-
-  type Coordinates {
-    lon: Float
     lat: Float
+    lon: Float
+    timezone: String
+    current: Current
+    daily: Daily
   }
 
-  type Summary {
-    title: String
+  type Current {
+    dt: Int
+    sunrise: Int
+    sunset: Int
+    temp: Float
+    feels_like: Float
+    pressure: Int
+    humidity: Int
+    dew_point: Int
+    uvi: Float
+    clouds: Int
+    visibility: Int
+    wind_speed: Int
+    wind_deg: Int
+    weather: [Weather]
+  }
+
+  type Weather {
+    id: ID
+    main: String
     description: String
     icon: String
   }
 
-  type Temperature {
-    actual: Float
-    feelsLike: Float
-    min: Float
-    max: Float
-  }
-
-  type Wind {
-    speed: Float
-    deg: Int
-  }
-
-  type Clouds {
-    all: Int
-    visibility: Int
+  type Daily {
+    dt: Int
+    sunrise: Int
+    sunset: Int
+    temp: Temperature
     humidity: Int
+    wind_speed: Float
+    wind_deg: Int
+    weather: [Weather]
   }
 
-  type Weather {
-    summary: Summary
-    temperature: Temperature
-    wind: Wind
-    clouds: Clouds
-    timestamp: Int
+  type Temperature {
+    day: Flot
+    night: Float
   }
 
   input ConfigInput {
@@ -53,7 +56,6 @@ const typeDefs = gql`
 
   type Query {
     getCityByName(name: String!, country: String, config: ConfigInput): City
-    getCityById(id: [String!], config: ConfigInput): [City]
   }
 
   enum Unit {

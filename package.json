@@ -8,17 +8,9 @@
     "dev": "nodemon -r dotenv/config index.js"
   },
   "keywords": [
-    "weather",
-    "GraphQL",
-    "server",
-    "open weather map",
-    "data",
-    "API",
-    "testing",
-    "apollo",
-    "prototyping"
+    ""
   ],
-  "author": "Konstantin Münster",
+  "author": "Augustina Radziunaite",
   "license": "MIT",
   "dependencies": {
     "apollo-server": "^2.16.0",
