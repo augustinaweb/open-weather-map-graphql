@@ -8,7 +8,11 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   introspection: true,
-  playground: true,
+  playground: {
+    settings: {
+      "editor.theme": "light",
+    },
+  },
 });
 
 server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
