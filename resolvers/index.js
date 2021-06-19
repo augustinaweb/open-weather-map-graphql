@@ -29,17 +29,17 @@ const resolvers = {
           });
         }
 
-        const lat = await `&lat=${data.coord.lat}`;
-        const lon = await `&lon=${data.coord.lon}`;
-        const url2 = await `${ONECALL_API}${lat}${lon}`;
+        const lat = `&lat=${data.coord.lat}`;
+        const lon = `&lon=${data.coord.lon}`;
+        const url2 = `${ONECALL_API}${lat}${lon}`;
         if (units) {
-          url2 = await `${url2}${units}`;
+          url2 = `${url2}${units}`;
         }
         if (lang) {
-          url2 = await `${url2}${lang}`;
+          url2 = `${url2}${lang}`;
         }
 
-        const { results } = await axios.get(url2);
+        const { data: results } = await axios.get(url2);
 
         const daily = results.daily.map((day) => {
           return {
@@ -64,8 +64,10 @@ const resolvers = {
           };
         });
 
+        console.log(results.current.weather);
+
         return {
-          lat: data.lat,
+          lat: results.lat,
           lon: results.lon,
           timezone: results.timezone,
           current: {
@@ -84,16 +86,17 @@ const resolvers = {
             wind_deg: results.current.wind_deg,
             weather: [
               {
-                id: results.weather.id,
-                main: results.weather.main,
-                description: results.weather.description,
-                icon: results.weather.icon,
+                id: results.current.weather.id,
+                main: results.current.weather.main,
+                description: results.current.weather.description,
+                icon: results.current.weather.icon,
               },
             ],
           },
           daily: daily,
         };
       } catch (e) {
+        console.log(e);
         return null;
       }
     },
