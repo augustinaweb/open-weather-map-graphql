@@ -2,7 +2,6 @@ const axios = require("axios");
 const { UserInputError } = require("apollo-server");
 
 const WEATHER_API = `https://api.openweathermap.org/data/2.5/weather?appid=${process.env.KEY}`;
-//const ONECALL_API = `https://api.openweathermap.org/data/2.5/onecall?appid=${process.env.KEY}&exclude=daily,minutely,alerts`;
 const ONECALL_API = `https://api.openweathermap.org/data/2.5/onecall?appid=${process.env.KEY}`;
 
 const resolvers = {
