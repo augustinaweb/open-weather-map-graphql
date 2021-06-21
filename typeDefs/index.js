@@ -6,7 +6,7 @@ const typeDefs = gql`
     lon: Float
     timezone: String
     current: Current
-    daily: Daily
+    daily: [Daily]
   }
 
   type Current {
