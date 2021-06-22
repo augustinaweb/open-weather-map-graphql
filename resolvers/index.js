@@ -53,16 +53,16 @@ const resolvers = {
             humidity: day.humidity,
             wind_speed: day.wind_speed,
             wind_deg: day.wind_deg,
-            weather: {
-              id: day.weather.id,
-              main: day.weather.description,
-              description: day.weather.description,
-              icon: day.weather.icon,
-            },
+            weather: [
+              {
+                id: day.weather[0].id,
+                main: day.weather[0].description,
+                description: day.weather[0].description,
+                icon: day.weather[0].icon,
+              },
+            ],
           };
         });
-
-        //console.log(results.current.weather);
 
         return {
           lat: results.lat,
@@ -82,12 +82,14 @@ const resolvers = {
             visibility: results.current.visibility,
             wind_speed: results.current.wind_speed,
             wind_deg: results.current.wind_deg,
-            weather: {
-              id: results.current.weather.id,
-              main: results.current.weather.main,
-              description: results.current.weather.description,
-              icon: results.current.weather.icon,
-            },
+            weather: [
+              {
+                id: results.current.weather[0].id,
+                main: results.current.weather[0].main,
+                description: results.current.weather[0].description,
+                icon: results.current.weather[0].icon,
+              },
+            ],
           },
           daily: daily,
         };
