@@ -39,6 +39,7 @@ const resolvers = {
         }
 
         const { data: results } = await axios.get(url2);
+        console.log(results.current);
 
         const daily = results.daily.map((day) => {
           return {
@@ -52,18 +53,16 @@ const resolvers = {
             humidity: day.humidity,
             wind_speed: day.wind_speed,
             wind_deg: day.wind_deg,
-            weather: [
-              {
-                id: day.weather.id,
-                main: day.weather.description,
-                description: day.weather.description,
-                icon: day.weather.icon,
-              },
-            ],
+            weather: {
+              id: day.weather.id,
+              main: day.weather.description,
+              description: day.weather.description,
+              icon: day.weather.icon,
+            },
           };
         });
 
-        console.log(results.current.weather);
+        //console.log(results.current.weather);
 
         return {
           lat: results.lat,
@@ -83,14 +82,12 @@ const resolvers = {
             visibility: results.current.visibility,
             wind_speed: results.current.wind_speed,
             wind_deg: results.current.wind_deg,
-            weather: [
-              {
-                id: results.current.weather.id,
-                main: results.current.weather.main,
-                description: results.current.weather.description,
-                icon: results.current.weather.icon,
-              },
-            ],
+            weather: {
+              id: results.current.weather.id,
+              main: results.current.weather.main,
+              description: results.current.weather.description,
+              icon: results.current.weather.icon,
+            },
           },
           daily: daily,
         };

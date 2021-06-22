@@ -26,13 +26,6 @@ const typeDefs = gql`
     weather: Weather
   }
 
-  type Weather {
-    id: ID
-    main: String
-    description: String
-    icon: String
-  }
-
   type Daily {
     dt: Int
     sunrise: Int
@@ -42,6 +35,13 @@ const typeDefs = gql`
     wind_speed: Float
     wind_deg: Int
     weather: Weather
+  }
+
+  type Weather {
+    id: ID
+    main: String
+    description: String
+    icon: String
   }
 
   type Temperature {
