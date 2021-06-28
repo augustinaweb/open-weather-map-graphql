@@ -94,7 +94,6 @@ const resolvers = {
           daily: daily,
         };
       } catch (e) {
-        console.log(e);
         return null;
       }
     },
