@@ -31,11 +31,11 @@ const resolvers = {
         const lat = `&lat=${data.coord.lat}`;
         const lon = `&lon=${data.coord.lon}`;
         const url2 = `${ONECALL_API}${lat}${lon}`;
-        if (units) {
-          url2 = `${url2}${units}`;
+        if (config && config.units) {
+          url2 = `${url2}&units=${config.units}`;
         }
-        if (lang) {
-          url2 = `${url2}${lang}`;
+        if (config && config.lang) {
+          url2 = url2 + `&lang=${config.lang}`;
         }
 
         const { data: results } = await axios.get(url2);
