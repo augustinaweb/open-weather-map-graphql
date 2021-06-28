@@ -6,7 +6,7 @@ const typeDefs = gql`
     lon: Float!
     timezone: String!
     current: Current!
-    daily: [Daily!]
+    daily: [Daily!]!
   }
 
   type Current {
@@ -23,7 +23,7 @@ const typeDefs = gql`
     visibility: Int!
     wind_speed: Int!
     wind_deg: Int!
-    weather: [Weather!]
+    weather: [Weather!]!
   }
 
   type Daily {
@@ -34,7 +34,7 @@ const typeDefs = gql`
     humidity: Int!
     wind_speed: Float!
     wind_deg: Int!
-    weather: [Weather!]
+    weather: [Weather!]!
   }
 
   type Weather {
