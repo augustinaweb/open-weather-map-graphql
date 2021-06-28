@@ -2,60 +2,60 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   type City {
-    lat: Float
-    lon: Float
-    timezone: String
-    current: Current
-    daily: [Daily]
+    lat: Float!
+    lon: Float!
+    timezone: String!
+    current: Current!
+    daily: [Daily]!
   }
 
   type Current {
-    dt: Int
-    sunrise: Int
-    sunset: Int
-    temp: Float
-    feels_like: Float
-    pressure: Int
-    humidity: Int
-    dew_point: Int
-    uvi: Float
-    clouds: Int
-    visibility: Int
-    wind_speed: Int
-    wind_deg: Int
-    weather: [Weather]
+    dt: Int!
+    sunrise: Int!
+    sunset: Int!
+    temp: Float!
+    feels_like: Float!
+    pressure: Int!
+    humidity: Int!
+    dew_point: Int!
+    uvi: Float!
+    clouds: Int!
+    visibility: Int!
+    wind_speed: Int!
+    wind_deg: Int!
+    weather: [Weather]!
   }
 
   type Daily {
-    dt: Int
-    sunrise: Int
-    sunset: Int
-    temp: Temperature
-    humidity: Int
-    wind_speed: Float
-    wind_deg: Int
-    weather: [Weather]
+    dt: Int!
+    sunrise: Int!
+    sunset: Int!
+    temp: Temperature!
+    humidity: Int!
+    wind_speed: Float!
+    wind_deg: Int!
+    weather: [Weather]!
   }
 
   type Weather {
-    id: ID
-    main: String
-    description: String
-    icon: String
+    id: ID!
+    main: String!
+    description: String!
+    icon: String!
   }
 
   type Temperature {
-    day: Float
-    night: Float
+    day: Float!
+    night: Float!
   }
 
   input ConfigInput {
-    units: Unit
-    lang: Language
+    units: Unit!
+    lang: Language!
   }
 
   type Query {
-    getCityByName(name: String!, country: String, config: ConfigInput): City
+    getCityByName(name: String!, country: String, config: ConfigInput): City!
   }
 
   enum Unit {
