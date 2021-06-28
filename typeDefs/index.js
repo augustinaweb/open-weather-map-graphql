@@ -50,8 +50,8 @@ const typeDefs = gql`
   }
 
   input ConfigInput {
-    units: Unit!
-    lang: Language!
+    units: Unit
+    lang: Language
   }
 
   type Query {
