@@ -55,7 +55,7 @@ const typeDefs = gql`
   }
 
   type Query {
-    getCityByName(name: String!, country: String, config: ConfigInput): City
+    getCityByName(name: String!, country: String, config: ConfigInput): City!
   }
 
   enum Unit {
